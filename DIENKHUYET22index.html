@@ -365,7 +365,29 @@
             30% { transform: translate(22px, 16px) rotate(1.5deg); }
             100% { transform: translate(0, 0); }
         }
-        #gunRig svg { width: 100%; height: 100%; overflow: visible; display: block; }
+        #gunRig svg {
+            width: 100%; height: 100%; overflow: visible; display: block;
+            /* viền sáng + quầng sáng để súng tách khỏi nền tối */
+            filter:
+                drop-shadow(0 0 1.5px rgba(200,232,242,0.95))
+                drop-shadow(0 0 10px rgba(111,230,242,0.45))
+                drop-shadow(0 0 28px rgba(111,230,242,0.22));
+        }
+        /* quầng sáng mờ phía sau súng */
+        #gunRig::before {
+            content: "";
+            position: absolute;
+            right: -10%; bottom: -20%;
+            width: 90%; height: 90%;
+            background: radial-gradient(closest-side, rgba(111,230,242,0.16), transparent);
+            pointer-events: none;
+        }
+        #gunRig.lv2 svg {
+            filter:
+                drop-shadow(0 0 2px rgba(255,255,255,0.95))
+                drop-shadow(0 0 14px rgba(111,230,242,0.6))
+                drop-shadow(0 0 34px rgba(111,230,242,0.3));
+        }
         .gun { transition: opacity 0.25s; }
         .gun.hidden { display: none; }
         .flash { opacity: 0; transform-box: fill-box; transform-origin: center; }
@@ -881,6 +903,7 @@
     function upgradeWeapon() {
         $('gun1').classList.add('hidden');
         $('gun2').classList.remove('hidden');
+        gunRig.classList.add('lv2');
         $('weaponName').textContent = 'Súng plasma';
         gunInner.classList.remove('recoil', 'equip'); void gunInner.offsetWidth; gunInner.classList.add('equip');
         banner('NÂNG CẤP VŨ KHÍ', `ĐẠT TRÊN ${UPGRADE_SCORE} ĐIỂM · SÚNG PLASMA`);
