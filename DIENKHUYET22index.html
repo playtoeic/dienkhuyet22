@@ -662,16 +662,23 @@
 
 <script>
     const rawWordList = [
-  "Maintenance", "application", "notifications", "delays", "e-ticket", "kiosk", // 1-6
-  "century", "restore", "authentic", "varieties", "consulting", "grounds", "expertise", // 7-13
-  "calling", "technique", "prospective", "persuade", "recordings", // 14-18
-  "umbrellas", "outside", "inferior", "components", "replacement", // 19-23
-  "qualified", "temporary", "staffing", "agency", "branch", "mention", "discount", // 24-30
-  "hospitality", "informative", "expo", "vendors", "construction", "progress", // 31-36
-  "streaming", "honoree", "tirelessly", "soundtrack", "composers", // 37-41
-  "figures", "retail", "virtual", "headset", "demonstrating", "purchasing", // 42-47
-  "facility", "operates", "forecast", "combination", "heads-up", "shuttle", // 48-53
-  "retirement", "prepping", "covering", "assignment", "potential", "available" // 54-59
+  "Attention", "customers", "yellow", "regular", "latest", "application", // 1-6
+  "updates", "regarding", "commuter", "e-ticket", "Printing", "additional", // 7-12
+  "Living", "Recently", "original", "eighteenth", "restore", "original", // 13-18
+  "authentic", "varieties", "That's", "project", "grounds", "estates", // 19-24
+  "planted", "today's", "technique", "clients", "session", "parties", // 25-30
+  "contacting", "persuade", "listen", "Stewart", "president", "problems", // 31-36
+  "umbrellas", "everything", "graphic", "greater", "products", "suppliers", // 37-42
+  "inferior", "umbrellas", "Solutions", "qualified", "available", "business", // 43-48
+  "largest", "branch", "Temp-Time", "received", "year's", "particularly", // 49-54
+  "important", "conference", "chains", "hotels", "visited", "progress", // 55-60
+  "annual", "streaming", "Tonight's", "I-Beat", "original", "around", // 61-66
+  "discovering", "leading", "famous", "perform", "figures", "smartwatches", // 67-72
+  "president", "expanding", "virtual", "popular", "information", "meeting", // 73-78
+  "software", "trends", "follow", "all-access", "curious", "facility", // 79-84
+  "you'll", "forecast", "combination", "outside", "shuttle", "tonight", // 85-90
+  "retirement", "employee", "already", "ballroom", "assignment", "Amanda", // 91-96
+  "covering", "meeting", "client", "anything", // 97-100
 ];
 
     function shuffleArray(array) {
@@ -683,56 +690,38 @@
     }
 
     const data = [
-  { title: "71 - 73", start: 5.5, end: 30.5, lines: [
-    { s: "W-Br", t: "Attention, Casella Transit customers. (1)_______ work on the red and yellow lines will begin next week. You can expect some disruptions to regular service, so please plan ahead.", a: ["Maintenance"] },
-    { s: "W-Br", t: "Use the latest version of our mobile phone (2)_______ for real-time updates. You can receive (3)_______ regarding (4)_______ if your train is impacted.", a: ["application", "notifications", "delays"] },
-    { s: "W-Br", t: "Want to save on commuter rides? Purchase your (5)_______ through the mobile app as well. Printing a ticket at a (6)_______ is now subject to additional fees.", a: ["e-ticket", "kiosk"] }
+  { title: "71 - 73", start: 5.5, end: 36.5, lines: [
+    { s: "W-Br", t: "(1)_______ Casella Transit (2)_______ Maintenance work on the red and (3)_______ lines will begin next week. You can expect some disruptions to (4)_______ service, so please plan ahead. Use the (5)_______ version of our mobile phone (6)_______ for real-time (7)_______ 72 You can receive notifications (8)_______ delays if your train is impacted . 73 Want to save on (9)_______ rides? Purchase your (10)_______ through the mobile app as well. (11)_______ a ticket at a kiosk is now subject to (12)_______ fees.", a: ["Attention","customers","yellow","regular","latest","application","updates","regarding","commuter","e-ticket","Printing","additional"] }
   ]},
-  { title: "74 - 76", start: 83.5, end: 114.5, lines: [
-    { s: "W-Am", t: "Good morning, Glenman House Living Museum staff. Recently, researchers discovered the original plans for the house's gardens from the eighteenth (7)_______.", a: ["century"] },
-    { s: "W-Am", t: "So, we're going to (8)_______ the gardens based on those plans! Even though we have the original designs, making an (9)_______ re-creation won't be an easy task.", a: ["restore", "authentic"] },
-    { s: "W-Am", t: "We don't know what specific (10)_______ of plants were grown back then. That's why we're so lucky to have Vivek Hazarika (11)_______ on this project.", a: ["varieties", "consulting"] },
-    { s: "W-Am", t: "As a gardener who has managed the (12)_______ of many historic estates, he has extensive (13)_______ in what would have been planted at the time.", a: ["grounds", "expertise"] }
+  { title: "74 - 76", start: 83.5, end: 125.5, lines: [
+    { s: "W-Am", t: "Good morning, Glenman House (13)_______ Museum staff. (14)_______ researchers discovered the (15)_______ plans for the house's gardens from the (16)_______ century .So, we're going to (17)_______ the gardens based on those plans! Even though we have the (18)_______ designs, making an (19)_______ re-creation won't be an easy task. We don't know what specific (20)_______ of plants were grown back then. (21)_______ why we're so lucky to have Vivek Hazarika consulting on this (22)_______ As a gardener who has managed the (23)_______ of many historic (24)_______ , he has extensive expertise in what would have been (25)_______ at the time.", a: ["Living","Recently","original","eighteenth","restore","original","authentic","varieties","That's","project","grounds","estates","planted"] }
   ]},
-  { title: "77 - 79", start: 169.5, end: 202.0, lines: [
-    { s: "M-Cn", t: "Welcome, new sales representatives, to today's session on cold (14)_______, a sales (15)_______ where we call potential clients who haven't heard of us yet.", a: ["calling", "technique"] },
-    { s: "M-Cn", t: "Toward the end of the session, you'll each be given a list of (16)_______ parties to call. Your job's to (17)_______ them that what you have to say is worth their while.", a: ["prospective", "persuade"] },
-    { s: "M-Cn", t: "Be friendly and avoid using scripts. Now we'll listen to some cold call (18)_______ to learn what works and what doesn't.", a: ["recordings"] }
+  { title: "77 - 79", start: 169.5, end: 202, lines: [
+    { s: "M-Cn", t: "Welcome, new sales representatives , to (26)_______ session on cold calling , a sales (27)_______ where we call potential (28)_______ who haven't heard of us yet. Toward the end of the (29)_______ 78 you'll each be given a list of prospective (30)_______ to call. Now, the people you're (31)_______ are busy and may not be receptive . Your job's to (32)_______ them that what you have to say is worth their while . Be friendly and avoid using scripts .Now we'll (33)_______ to some cold call recordings to learn what works and what doesn't.", a: ["today's","technique","clients","session","parties","contacting","persuade","listen"] }
   ]},
-  { title: "80 - 82", start: 245.5, end: 283.0, lines: [
-    { s: "M-Au", t: "Ms. Stewart, this is Rodrigo Gomez, president of Gomez and Sons. I want to apologize personally for the problems your restaurant experienced using our patio (19)_______.", a: ["umbrellas"] },
-    { s: "M-Au", t: "At our company, we pride ourselves on doing everything in-house, from graphic design to production. But we do use (20)_______ suppliers for parts.", a: ["outside"] },
-    { s: "M-Au", t: "Apparently, we received some (21)_______ metal (22)_______ . We will send you a (23)_______ set of umbrellas at no cost today, constructed with new metal parts.", a: ["inferior", "components", "replacement"] }
+  { title: "80 - 82", start: 245.5, end: 283, lines: [
+    { s: "M-Au", t: "Ms. (34)_______ this is Rodrigo Gomez, (35)_______ of Gomez and Sons. I want to apologize personally for the (36)_______ your restaurant experienced using our patio (37)_______ . At our company, we pride ourselves on doing (38)_______ in-house, from (39)_______ design to production. This gives us (40)_______ control over the quality of our (41)_______ But we do use outside (42)_______ for parts. 81 Apparently, we received some (43)_______ metal components . We will send you a replacement set of (44)_______ at no cost today, constructed with new metal parts.", a: ["Stewart","president","problems","umbrellas","everything","graphic","greater","products","suppliers","inferior","umbrellas"] }
   ]},
   { title: "83 - 85", start: 328.5, end: 358.5, lines: [
-    { s: "W-Br", t: "Temp-Time Work Solutions has hundreds of (24)_______, (25)_______ workers available to meet any of your (26)_______ needs.", a: ["qualified", "temporary", "staffing"] },
-    { s: "W-Br", t: "Please call us to help your business fill open positions. We are the largest temp (27)_______ in the region, with (28)_______ offices in six locations.", a: ["agency", "branch"] },
-    { s: "W-Br", t: "Let Temp-Time help you find the right person to complete just about any job! Call us at 555-0145 and (29)_______ this ad to get a twenty percent (30)_______ off our fee.", a: ["mention", "discount"] }
+    { s: "W-Br", t: "Temp-Time Work (45)_______ has hundreds of (46)_______ temporary workers (47)_______ to meet any of your staffing needs. Please call us to help your (48)_______ fill open positions. We are the (49)_______ temp agency in the region, with (50)_______ offices in six locations. Let (51)_______ help you find the right person to complete just about any job! Call us at", a: ["Solutions","qualified","available","business","largest","branch","Temp-Time"] }
   ]},
-  { title: "86 - 88", start: 401.5, end: 440.0, lines: [
-    { s: "M-Au", t: "I've just received details about this year's (31)_______ conference. It looks like it'll be particularly (32)_______ this year. It'll be held at the end of the month.", a: ["hospitality", "informative"] },
-    { s: "M-Au", t: "The conference will feature an (33)_______ of (34)_______ who serve hotel chains, which could be useful given that we'll be opening hotels in two new cities next year!", a: ["expo", "vendors"] },
-    { s: "M-Au", t: "Speaking of which, Thilo visited both of those (35)_______ sites last week and is now going to give us a (36)_______ report.", a: ["construction", "progress"] }
+  { title: "55 - 014", start: 0, end: 0, lines: [
+
   ]},
-  { title: "89 - 91", start: 484.5, end: 524.0, lines: [
-    { s: "W-Am", t: "Welcome to the annual Soundtrack Music Awards show. This year, we're (37)_______ this event live over the Internet for the very first time!", a: ["streaming"] },
-    { s: "W-Am", t: "Tonight's (38)_______, Olga Alabi, founded the music label in 1996. She has worked (39)_______ to bring original (40)_______ music to film audiences.", a: ["honoree", "tirelessly", "soundtrack"] },
-    { s: "W-Am", t: "She has been responsible for discovering and developing some of today's leading (41)_______ . In fact, after Ms. Alabi receives her award, some of her famous clients will perform.", a: ["composers"] }
+  { title: "86 - 88", start: 401.5, end: 440, lines: [
+    { s: "M-Au", t: "I've just (52)_______ details about this (53)_______ hospitality conference. It looks like it'll be (54)_______ informative this year. It'll be held at the end of the month. Now, I know I've set your project due dates for the end of the month as well, but this is an (55)_______ opportunity. The (56)_______ will feature an expo of vendors who serve hotel (57)_______ , which could be useful given that 87 we'll be opening (58)_______ in two new cities next year! Speaking of which, 88 Thilo (59)_______ both of those construction sites last week and is now going to give us a (60)_______ report.", a: ["received","year's","particularly","important","conference","chains","hotels","visited","progress"] }
   ]},
-  { title: "92 - 94", start: 570.5, end: 602.0, lines: [
-    { s: "M-Cn", t: "OK, team, let's discuss our first-quarter sales (42)_______ . Unfortunately, (43)_______ sales of our smartwatches and other products have continued to fall.", a: ["figures", "retail"] },
-    { s: "M-Cn", t: "Our president has proposed expanding the product line to include a (44)_______ reality (45)_______ . And those have been popular lately.", a: ["virtual", "headset"] },
-    { s: "M-Cn", t: "Next on the agenda, Raya will be (46)_______ the new software we'll be using to track consumer (47)_______ trends.", a: ["demonstrating", "purchasing"] }
+  { title: "89 - 91", start: 484.5, end: 524, lines: [
+    { s: "W-Am", t: "Welcome to the (61)_______ Soundtrack Music Awards show. This year, we're (62)_______ this event live over the Internet for the very first time! (63)_______ honoree, Olga Alabi, founded the (64)_______ music label in 1996. She has worked tirelessly to bring (65)_______ soundtrack music to film audiences (66)_______ the world. Over the years, she has been responsible for (67)_______ and developing some of today's (68)_______ composers . In fact, after Ms. Alabi receives her award, some of her most (69)_______ clients will (70)_______ for us.", a: ["annual","streaming","Tonight's","I-Beat","original","around","discovering","leading","famous","perform"] }
+  ]},
+  { title: "92 - 94", start: 570.5, end: 602, lines: [
+    { s: "M-Cn", t: "OK, team, let's discuss our first-quarter sales (71)_______ . Unfortunately, retail sales of our (72)_______ and other products have continued to fall. Our (73)_______ has proposed (74)_______ the product line to include a (75)_______ reality headset (tai nghe). And those have been (76)_______ lately. You can expect a lot more (77)_______ at a future (78)_______ Next on the agenda, Raya will be demonstrating the new (79)_______ we'll be using to track consumer purchasing (80)_______", a: ["figures","smartwatches","president","expanding","virtual","popular","information","meeting","software","trends"] }
   ]},
   { title: "95 - 97", start: 649.5, end: 686.5, lines: [
-    { s: "M-Au", t: "Please follow me, and we'll begin today's tour. Many of our visitors are just curious about how a modern sports (48)_______ of this size (49)_______.", a: ["facility", "operates"] },
-    { s: "M-Au", t: "Fortunately, today's (50)_______ shows a mix of sun and clouds. That's just the right (51)_______ for spending some time outside on the field comfortably.", a: ["forecast", "combination"] },
-    { s: "M-Au", t: "Also, as a (52)_______, a (53)_______ bus will meet us at the end of the tour to bring us all back to the parking lot.", a: ["heads-up", "shuttle"] }
+    { s: "M-Au", t: "Please (81)_______ me, and we'll begin today's tour. Now, I know not everyone who takes this (82)_______ tour is 95 a football fan. Many of our visitors are just (83)_______ about how 96 a modern sports (84)_______ of this size operates. Well, (85)_______ get to see that and much more. And fortunately for us, today's (86)_______ shows a mix of sun and clouds, with no rain. That's just the right (87)_______ for spending some time (88)_______ on the field comfortably . Also, as a heads-up , a (89)_______ bus will meet us at the end of the tour to bring us all back to the parking lot.", a: ["follow","all-access","curious","facility","you'll","forecast","combination","outside","shuttle"] }
   ]},
-  { title: "98 - 100", start: 735.5, end: 766.0, lines: [
-    { s: "W-Br", t: "As you all know, we're hosting a large event tonight. It's a dinner party to celebrate the (54)_______ of a longtime employee. The chefs are already (55)_______ dinner.", a: ["retirement", "prepping"] },
-    { s: "W-Br", t: "Amanda couldn't make it, so Kota's (56)_______ for her and will take Amanda's (57)_______ .", a: ["covering", "assignment"] },
-    { s: "W-Br", t: "I have a meeting with a (58)_______ client at noon, but otherwise, I'll be (59)_______ all day if anything comes up.", a: ["potential", "available"] }
+  { title: "98 - 100", start: 735.5, end: 766, lines: [
+    { s: "W-Br", t: "As you all know, we're hosting a large event (90)_______ It's a dinner party to celebrate the (91)_______ of a longtime (92)_______ of Jatton Incorporated. The chefs are (93)_______ prepping dinner, and I need you all to set up the (94)_______ . Here's the (95)_______ list. There's just one change. (96)_______ couldn't make it , so Kota's (97)_______ for her and will take Amanda's assignment. Now, I have a (98)_______ with a potential (99)_______ at noon, but otherwise, I'll be available all day if (100)_______ comes up.", a: ["tonight","retirement","employee","already","ballroom","assignment","Amanda","covering","meeting","client","anything"] }
   ]}
 ];
 
