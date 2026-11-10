@@ -6,6 +6,8 @@
     <title>Điền Khuyết 22 - PLAYTOEIC</title>
     <link rel="preconnect" href="https://api.fontshare.com">
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
+    <!-- Satoshi thiếu một số chữ tiếng Việt (vd: Ỗ, Ữ) → dùng Be Vietnam Pro bù cho các chữ đó -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         /* Bảng màu lấy theo ảnh 1: trời xanh thép, đá xám lạnh, HUD cyan, tia lửa cam */
         :root {
@@ -28,12 +30,18 @@
 
         * { box-sizing: border-box; }
 
+        /* Nhãn tiếng Việt: dùng Be Vietnam Pro để dấu (Ỗ, Ữ, Ẫ…) hiển thị đúng; tiếng Anh vẫn dùng Satoshi */
+        .section-status, .section-title, #weaponName, .hp-label, .score-box .label,
+        .word-group h3, .hud-title, #banner, #gameOver, .popup {
+            font-family: 'Be Vietnam Pro', 'Satoshi', 'Segoe UI', Arial, sans-serif;
+        }
+
         body {
             background:
                 radial-gradient(1200px 500px at 70% -10%, rgba(143,177,194,0.18), transparent 60%),
                 linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
             color: var(--text);
-            font-family: 'Satoshi', 'Segoe UI', Arial, sans-serif;
+            font-family: 'Satoshi', 'Be Vietnam Pro', 'Segoe UI', Arial, sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -243,7 +251,10 @@
         }
         .section-title { color: var(--text); font-weight: 900; font-size: 1.05rem; letter-spacing: 0.02em; }
         .section-status { margin-left: auto; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; color: var(--text-dim); }
-        .exercise-block.perfect .section-status { color: var(--good); }
+        .exercise-block.perfect .section-status { color: var(--good); font-size: 0.85rem; }
+        .exercise-block.running { border-left-color: var(--flash); }
+        .exercise-block.running .section-status { color: var(--flash); animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.45; } }
 
         .play-btn {
             background: transparent;
@@ -340,23 +351,43 @@
             position: fixed;
             right: 0;
             bottom: 0;
-            width: min(520px, 44vw);
+            width: min(600px, 50vw);
             aspect-ratio: 520 / 360;
             pointer-events: none;
             z-index: 1500;
             transform-origin: 100% 100%;
             will-change: transform;
         }
-        #gunInner { width: 100%; height: 100%; }
-        #gunInner.recoil { animation: recoil 0.14s ease-out; }
+        #gunInner { width: 100%; height: 100%; transform-origin: 100% 100%; }
+        #gunInner.recoil { animation: recoil 0.16s ease-out; }
         @keyframes recoil {
-            0% { transform: translate(0, 0); }
-            30% { transform: translate(22px, 16px) rotate(1.5deg); }
-            100% { transform: translate(0, 0); }
+            0% { transform: translate(0, 0) rotate(0deg); }
+            30% { transform: translate(14px, 10px) rotate(4deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
         }
         #gunRig svg { width: 100%; height: 100%; overflow: visible; display: block; }
-        .gun { transition: opacity 0.25s; }
-        .gun.hidden { display: none; }
+
+        /* Thân trượt: cấp 1 đen nhám */
+        .slide-top { fill: url(#slideTopMatte); }
+        .slide-side { fill: url(#slideSideMatte); }
+        .slide-rear { fill: #1d2328; }
+        .slide-edge { stroke: #6d7882; stroke-width: 1.5; opacity: 0.6; }
+        .accent { fill: #e9eef1; opacity: 0.8; }
+        .accent-line { stroke: transparent; }
+        /* Cấp 2: thân bạc, điểm ngắm cyan phát sáng */
+        #gunRig.lv2 .slide-top { fill: url(#slideTopChrome); }
+        #gunRig.lv2 .slide-side { fill: url(#slideSideChrome); }
+        #gunRig.lv2 .slide-rear { fill: #7f909a; }
+        #gunRig.lv2 .slide-edge { stroke: #ffffff; opacity: 0.9; }
+        #gunRig.lv2 .accent { fill: #6fe6f2; opacity: 1; filter: drop-shadow(0 0 3px #6fe6f2); }
+        #gunRig.lv2 .accent-line { stroke: #2fd0e3; stroke-width: 2; opacity: 0.8; }
+
+        /* Thân trượt lùi về khi bắn */
+        .slide.blow { animation: blow 0.12s ease-out; }
+        @keyframes blow {
+            40% { transform: translate(18px, 9px); }
+            100% { transform: translate(0, 0); }
+        }
         .flash { opacity: 0; transform-box: fill-box; transform-origin: center; }
         .flash.on { animation: flash 0.11s ease-out; }
         @keyframes flash {
@@ -477,7 +508,7 @@
         <div class="score-box">
             <div class="label">ĐIỂM</div>
             <div id="score">0</div>
-            <div id="weaponName">Súng trường tiêu chuẩn</div>
+            <div id="weaponName">Súng lục tiêu chuẩn</div>
         </div>
         <button class="icon-btn" id="muteBtn" title="Bật/tắt tiếng súng">🔊</button>
     </div>
@@ -539,80 +570,110 @@
         </filter>
       </defs>
 
-      <!-- SÚNG 1: súng trường tiêu chuẩn -->
-      <g class="gun" id="gun1" transform="translate(150 120) rotate(29)">
-        <!-- nòng -->
-        <path d="M24,-7 L190,-12 L190,13 L24,8 Z" fill="url(#metalDark)"/>
-        <rect x="6" y="-11" width="30" height="22" rx="3" fill="#1b252d" stroke="#4d6070" stroke-width="1"/>
-        <rect x="12" y="-11" width="3" height="22" fill="#0c1116"/>
-        <rect x="21" y="-11" width="3" height="22" fill="#0c1116"/>
-        <!-- ốp tay -->
-        <path d="M170,-22 L330,-36 L330,34 L170,22 Z" fill="url(#metal)"/>
-        <g stroke="#10171d" stroke-width="4" stroke-linecap="round">
-          <line x1="200" y1="-12" x2="200" y2="10"/>
-          <line x1="225" y1="-14" x2="225" y2="12"/>
-          <line x1="250" y1="-16" x2="250" y2="14"/>
-          <line x1="275" y1="-18" x2="275" y2="16"/>
-        </g>
-        <!-- ray trên -->
-        <path d="M175,-24 L520,-64 L520,-54 L175,-18 Z" fill="#26323c"/>
-        <!-- thân súng -->
-        <path d="M310,-48 L640,-82 L640,98 L310,52 Z" fill="url(#metal)"/>
-        <path d="M310,-48 L640,-82 L640,-70 L310,-38 Z" fill="#6c8292" opacity="0.6"/>
-        <!-- ống ngắm -->
-        <path d="M380,-70 L470,-82 L470,-118 L392,-104 Z" fill="url(#metalDark)"/>
-        <ellipse cx="386" cy="-87" rx="9" ry="17" fill="#0e151a" stroke="#56707f" stroke-width="2"/>
-        <ellipse cx="386" cy="-87" rx="5" ry="10" fill="#2fd0e3" opacity="0.55"/>
-        <!-- băng đạn -->
-        <path d="M400,60 L455,66 L445,170 L385,160 Z" fill="url(#metalDark)"/>
-        <!-- đèn trạng thái -->
-        <rect x="360" y="-8" width="40" height="6" rx="2" fill="#ff9a3c" opacity="0.85"/>
-        <!-- tay đeo găng -->
-        <path d="M200,18 C210,60 260,82 300,70 C320,64 326,40 318,22 C300,30 250,34 200,18 Z" fill="url(#glove)"/>
-        <path d="M215,24 C222,44 240,56 258,58" stroke="#0b0d0e" stroke-width="3" fill="none"/>
-        <path d="M240,28 C246,46 262,60 282,60" stroke="#0b0d0e" stroke-width="3" fill="none"/>
-        <!-- đầu nòng & tia lửa -->
-        <circle class="muzzle" cx="2" cy="0" r="1" fill="none"/>
-        <g transform="translate(-8 0)"><g class="flash">
-          <polygon points="0,-34 9,-9 40,0 9,9 0,34 -9,9 -60,0 -9,-9" fill="url(#flashFire)"/>
-          <circle r="16" fill="url(#flashFire)"/>
-        </g></g>
-      </g>
+      <defs>
+        <linearGradient id="slideTopMatte" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#5d6871"/><stop offset="1" stop-color="#2a3138"/>
+        </linearGradient>
+        <linearGradient id="slideSideMatte" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#3a434b"/><stop offset="1" stop-color="#14191d"/>
+        </linearGradient>
+        <linearGradient id="slideTopChrome" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ffffff"/><stop offset="0.5" stop-color="#cfdbe1"/><stop offset="1" stop-color="#8ea1ac"/>
+        </linearGradient>
+        <linearGradient id="slideSideChrome" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#e3ecf0"/><stop offset="0.45" stop-color="#a7b7c0"/><stop offset="1" stop-color="#55666f"/>
+        </linearGradient>
+        <linearGradient id="frameGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#262d33"/><stop offset="1" stop-color="#0d1114"/>
+        </linearGradient>
+        <linearGradient id="gloveGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#3d4246"/><stop offset="1" stop-color="#131517"/>
+        </linearGradient>
+        <linearGradient id="skinGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#e2a27a"/><stop offset="1" stop-color="#a8673f"/>
+        </linearGradient>
+        <linearGradient id="sleeveGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#3b4f5c"/><stop offset="1" stop-color="#1b262e"/>
+        </linearGradient>
+      </defs>
 
-      <!-- SÚNG 2: súng plasma (mở khoá khi điểm > 70) -->
-      <g class="gun hidden" id="gun2" transform="translate(140 115) rotate(29)">
-        <!-- thân bọc giáp -->
-        <path d="M30,-16 C80,-26 140,-30 210,-36 L640,-96 L640,110 L210,40 C140,34 80,26 30,16 Z" fill="url(#armor)"/>
-        <path d="M30,-16 C80,-26 140,-30 210,-36 L640,-96 L640,-80 L210,-24 C140,-18 80,-14 30,-8 Z" fill="#ffffff" opacity="0.55"/>
-        <!-- phần tối bên dưới -->
-        <path d="M60,8 C120,18 170,24 230,30 L640,90 L640,140 L250,62 C170,50 110,34 60,8 Z" fill="url(#armorDark)"/>
-        <!-- cuộn năng lượng ở đầu -->
-        <ellipse cx="34" cy="0" rx="10" ry="18" fill="#0e1a22" stroke="#9fb3bf" stroke-width="2"/>
-        <ellipse cx="34" cy="0" rx="6" ry="11" fill="#6fe6f2" filter="url(#glow)"/>
-        <g fill="#6fe6f2" filter="url(#glow)">
-          <rect x="70" y="-24" width="6" height="40" rx="3"/>
-          <rect x="95" y="-27" width="6" height="46" rx="3"/>
-          <rect x="120" y="-30" width="6" height="52" rx="3"/>
+      <!-- SÚNG LỤC + TAY CẦM (cấp 1: đen nhám, cấp 2: thân bạc) -->
+      <g id="pistol">
+        <!-- tay áo -->
+        <path d="M440,300 L560,262 L580,420 L410,420 Z" fill="url(#sleeveGrad)"/>
+        <path d="M436,302 L556,264 L560,282 L444,322 Z" fill="#132029"/>
+
+        <!-- báng súng -->
+        <path d="M356,236 L432,262 L476,380 L384,380 Z" fill="url(#frameGrad)"/>
+
+        <!-- mu bàn tay (găng) -->
+        <path d="M384,246 C424,232 474,246 506,286 L528,330 L520,400 L392,400 C372,350 366,292 384,246 Z" fill="url(#gloveGrad)"/>
+        <path d="M418,262 C446,262 474,276 492,300" stroke="#53595e" stroke-width="2" fill="none" opacity="0.7"/>
+        <path d="M410,286 C436,288 460,300 476,318" stroke="#0b0c0d" stroke-width="2" fill="none"/>
+
+        <!-- khung súng -->
+        <path d="M236,164 L403,256 L430,240 L432,264 L402,282 L330,246 L240,186 Z" fill="url(#frameGrad)"/>
+        <path d="M240,186 L330,246" stroke="#3b444b" stroke-width="2"/>
+        <!-- vòng cò + cò súng -->
+        <path d="M300,214 C290,242 300,266 324,270 C342,272 354,258 354,240" stroke="#11161a" stroke-width="9" fill="none" stroke-linecap="round"/>
+        <path d="M322,228 C318,240 320,250 328,256" stroke="#5a656d" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+        <!-- ngón tay quấn báng -->
+        <g fill="url(#gloveGrad)" stroke="#0b0c0d" stroke-width="2">
+          <ellipse cx="360" cy="292" rx="34" ry="15" transform="rotate(28 360 292)"/>
+          <ellipse cx="366" cy="320" rx="33" ry="15" transform="rotate(30 366 320)"/>
+          <ellipse cx="374" cy="348" rx="31" ry="14" transform="rotate(32 374 348)"/>
         </g>
-        <!-- dải sáng dọc thân -->
-        <path d="M160,4 L620,-30" stroke="#6fe6f2" stroke-width="5" filter="url(#glow)" stroke-linecap="round"/>
-        <!-- vây trên -->
-        <path d="M250,-42 L330,-112 L420,-122 L380,-62 Z" fill="url(#armor)" stroke="#5d717d" stroke-width="1"/>
-        <path d="M300,-70 L400,-110" stroke="#6fe6f2" stroke-width="3" filter="url(#glow)"/>
-        <!-- màn hình điểm -->
-        <g transform="translate(330 -40) rotate(-6)">
-          <path d="M0,0 L84,-10 L84,40 L0,48 Z" fill="#071016" stroke="#6fe6f2" stroke-width="2"/>
-          <text id="gunScore" x="42" y="27" text-anchor="middle" font-family="Satoshi, Segoe UI, sans-serif" font-weight="900" font-size="28" fill="#6fe6f2" filter="url(#glow)">0</text>
+        <!-- đầu ngón (lộ da, găng cụt ngón) -->
+        <g fill="url(#skinGrad)">
+          <ellipse cx="334" cy="278" rx="11" ry="9"/>
+          <ellipse cx="340" cy="306" rx="11" ry="9"/>
+          <ellipse cx="350" cy="335" rx="10" ry="8"/>
         </g>
-        <!-- tay đeo găng -->
-        <path d="M190,30 C200,72 250,96 292,84 C314,78 320,52 312,34 C292,42 240,46 190,30 Z" fill="url(#glove)"/>
-        <path d="M206,36 C214,56 232,70 250,72" stroke="#0b0d0e" stroke-width="3" fill="none"/>
-        <path d="M232,40 C238,60 256,74 276,74" stroke="#0b0d0e" stroke-width="3" fill="none"/>
-        <!-- đầu nòng & tia plasma -->
-        <circle class="muzzle" cx="22" cy="0" r="1" fill="none"/>
-        <g transform="translate(12 0)"><g class="flash">
-          <circle r="30" fill="url(#flashPlasma)"/>
-          <polygon points="0,-22 6,-6 26,0 6,6 0,22 -6,6 -50,0 -6,-6" fill="url(#flashPlasma)"/>
+        <!-- ngón trỏ đặt dọc khung -->
+        <path d="M392,262 C370,252 346,240 318,226" stroke="url(#gloveGrad)" stroke-width="18" fill="none" stroke-linecap="round"/>
+        <ellipse cx="314" cy="224" rx="10" ry="8" fill="url(#skinGrad)" transform="rotate(28 314 224)"/>
+        <!-- ngón cái -->
+        <path d="M410,248 C388,232 362,218 336,206" stroke="url(#gloveGrad)" stroke-width="17" fill="none" stroke-linecap="round"/>
+        <ellipse cx="331" cy="203" rx="11" ry="8" fill="url(#skinGrad)" transform="rotate(28 331 203)"/>
+
+        <!-- thân trượt (slide) -->
+        <g class="slide">
+          <!-- mặt bên -->
+          <path class="slide-side" d="M205,118 L403,214 L403,256 L205,146 Z"/>
+          <!-- mặt trên -->
+          <path class="slide-top" d="M205,118 L232,102 L430,198 L403,214 Z"/>
+          <!-- mặt sau (hướng về người chơi) -->
+          <path class="slide-rear" d="M403,214 L430,198 L430,240 L403,256 Z"/>
+          <!-- rãnh kéo -->
+          <g stroke="#0c1013" stroke-width="2.5" opacity="0.75">
+            <line x1="354" y1="194" x2="354" y2="230"/>
+            <line x1="362" y1="198" x2="362" y2="234"/>
+            <line x1="370" y1="202" x2="370" y2="239"/>
+            <line x1="378" y1="206" x2="378" y2="243"/>
+            <line x1="386" y1="210" x2="386" y2="248"/>
+          </g>
+          <!-- cửa văng vỏ -->
+          <path d="M294,167 L328,184 L328,206 L294,189 Z" fill="#0a0d10"/>
+          <!-- đường gờ -->
+          <path class="slide-edge" d="M205,118 L403,214"/>
+          <!-- đầu ruồi -->
+          <path d="M218,108 L228,103 L228,96 L218,100 Z" fill="#11161a"/>
+          <circle class="accent" cx="223" cy="101" r="2.6"/>
+          <!-- thước ngắm sau -->
+          <path d="M398,208 L432,191 L432,180 L398,197 Z" fill="#11161a"/>
+          <path d="M410,201 L420,196 L420,190 L410,195 Z" fill="#000"/>
+          <circle class="accent" cx="404" cy="200" r="2.4"/>
+          <circle class="accent" cx="426" cy="189" r="2.4"/>
+          <!-- vạch trang trí cấp 2 -->
+          <path class="accent-line" d="M222,128 L380,204"/>
+        </g>
+
+        <!-- đầu nòng & tia lửa -->
+        <circle class="muzzle" cx="206" cy="122" r="1" fill="none"/>
+        <g transform="translate(200 120) rotate(26)"><g class="flash">
+          <polygon points="0,-30 8,-8 30,0 8,8 0,30 -8,8 -70,0 -8,-8" fill="url(#flashFire)"/>
+          <circle r="18" fill="url(#flashFire)"/>
         </g></g>
       </g>
     </svg>
@@ -706,7 +767,7 @@
     // ===== Luật chơi =====
     const MAX_HP = 100;
     const WRONG_DAMAGE = 10;       // bắn sai: -10 máu
-    const SECTION_BONUS = 5;       // đúng hết 1 đoạn không sai lần nào: +5
+    const SECTION_BONUS = 5;       // bấm ▶ rồi điền hết 1 đoạn khi audio chưa dừng: PERFECT +5
     const UPGRADE_SCORE = 70;      // điểm trên 70: đổi súng
 
     const state = {
@@ -737,31 +798,31 @@
         out.gain.value = 0.35;
         out.connect(ctx.destination);
 
-        if (state.weapon === 1) {
-            // tiếng nổ: nhiễu trắng tắt dần
-            const len = 0.18 * ctx.sampleRate;
-            const buf = ctx.createBuffer(1, len, ctx.sampleRate);
-            const d = buf.getChannelData(0);
-            for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
-            const src = ctx.createBufferSource();
-            src.buffer = buf;
-            const lp = ctx.createBiquadFilter();
-            lp.type = 'lowpass';
-            lp.frequency.value = 2400;
-            src.connect(lp).connect(out);
-            src.start(t);
-        } else {
-            // tiếng plasma: sóng vuốt từ cao xuống thấp
+        // tiếng nổ: nhiễu trắng tắt dần
+        const len = 0.18 * ctx.sampleRate;
+        const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+        const d = buf.getChannelData(0);
+        for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        const lp = ctx.createBiquadFilter();
+        lp.type = 'lowpass';
+        lp.frequency.value = state.weapon === 1 ? 2400 : 1700;
+        src.connect(lp).connect(out);
+        src.start(t);
+
+        if (state.weapon === 2) {
+            // súng bạc: thêm tiếng "thụp" trầm cho nặng tay hơn
             const o = ctx.createOscillator();
             const g = ctx.createGain();
-            o.type = 'sawtooth';
-            o.frequency.setValueAtTime(1400, t);
-            o.frequency.exponentialRampToValueAtTime(160, t + 0.2);
-            g.gain.setValueAtTime(0.5, t);
-            g.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+            o.type = 'sine';
+            o.frequency.setValueAtTime(140, t);
+            o.frequency.exponentialRampToValueAtTime(50, t + 0.15);
+            g.gain.setValueAtTime(0.9, t);
+            g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
             o.connect(g).connect(out);
             o.start(t);
-            o.stop(t + 0.24);
+            o.stop(t + 0.2);
         }
 
         // tiếng báo trúng / trượt
@@ -779,7 +840,7 @@
     }
 
     // ===== Súng xoay theo chuột =====
-    const MUZZLE_ANGLE = Math.atan2(-240, -370);   // hướng nòng mặc định (từ góc phải dưới)
+    const MUZZLE_ANGLE = Math.atan2(120 - 360, 200 - 520);   // hướng nòng mặc định (từ góc phải dưới)
     let aimRot = 0, aimX = 0, aimY = 0, targetRot = 0, targetX = 0, targetY = 0;
 
     function updateAim(x, y) {
@@ -799,10 +860,8 @@
         requestAnimationFrame(loop);
     })();
 
-    function activeGun() { return $(state.weapon === 1 ? 'gun1' : 'gun2'); }
-
     function fire(x, y, hit) {
-        const gun = activeGun();
+        const gun = $('pistol');
         const m = gun.querySelector('.muzzle').getBoundingClientRect();
         const mx = m.left + m.width / 2, my = m.top + m.height / 2;
         const color = state.weapon === 1 ? '#ffd27a' : '#6fe6f2';
@@ -813,7 +872,7 @@
         line.setAttribute('x1', mx); line.setAttribute('y1', my);
         line.setAttribute('x2', x); line.setAttribute('y2', y);
         line.setAttribute('stroke', color);
-        line.setAttribute('stroke-width', state.weapon === 1 ? 2.5 : 5);
+        line.setAttribute('stroke-width', state.weapon === 1 ? 2.5 : 3.5);
         line.setAttribute('class', 'tracer');
         if (state.weapon === 2) line.setAttribute('filter', 'drop-shadow(0 0 6px #6fe6f2)');
         fx.appendChild(line);
@@ -832,6 +891,8 @@
         // tia lửa đầu nòng + giật súng
         const flash = gun.querySelector('.flash');
         flash.classList.remove('on'); void flash.getBBox(); flash.classList.add('on');
+        const slide = gun.querySelector('.slide');
+        slide.classList.remove('blow'); void slide.getBBox(); slide.classList.add('blow');
         gunInner.classList.remove('recoil', 'equip'); void gunInner.offsetWidth; gunInner.classList.add('recoil');
 
         playShot(hit);
@@ -858,18 +919,46 @@
     function addScore(n) {
         state.score += n;
         scoreEl.textContent = state.score;
-        $('gunScore').textContent = state.score;
         scoreEl.classList.remove('bump'); void scoreEl.offsetWidth; scoreEl.classList.add('bump');
-        if (state.weapon === 1 && state.score > UPGRADE_SCORE) upgradeWeapon();
+        if (state.weapon === 1 && state.score > UPGRADE_SCORE) {
+            // chờ thông báo PERFECT (nếu có) chạy xong rồi mới báo đổi súng
+            setTimeout(upgradeWeapon, $('banner').classList.contains('show') ? 1800 : 0);
+            state.weapon = 2;
+        }
     }
 
     function upgradeWeapon() {
-        state.weapon = 2;
-        $('gun1').classList.add('hidden');
-        $('gun2').classList.remove('hidden');
-        $('weaponName').textContent = 'Súng plasma';
+        gunRig.classList.add('lv2');
+        $('weaponName').textContent = 'Súng lục bạc';
         gunInner.classList.remove('recoil', 'equip'); void gunInner.offsetWidth; gunInner.classList.add('equip');
-        banner('NÂNG CẤP VŨ KHÍ', `ĐẠT TRÊN ${UPGRADE_SCORE} ĐIỂM · SÚNG PLASMA`);
+        banner('NÂNG CẤP VŨ KHÍ', `ĐẠT TRÊN ${UPGRADE_SCORE} ĐIỂM · SÚNG LỤC BẠC`);
+    }
+
+    // ===== Lượt nghe "không dừng" (PERFECT) =====
+    // Bấm ▶ của 1 đoạn chưa điền chỗ nào → bắt đầu lượt. Điền hết trước khi audio dừng → PERFECT +5.
+    function renderStatus(bi) {
+        const blk = state.blocks[bi];
+        if (blk.el.classList.contains('perfect')) return;
+        const status = blk.el.querySelector('.section-status');
+        const running = state.run && state.run.block === bi;
+        blk.el.classList.toggle('running', !!(running && state.run.valid));
+        if (running && state.run.valid) status.textContent = `● ĐANG NGHE · CÒN ${blk.left}`;
+        else if (blk.left === 0) status.textContent = 'XONG';
+        else status.textContent = `CÒN ${blk.left} CHỖ TRỐNG`;
+    }
+
+    function startRun(bi) {
+        const blk = state.blocks[bi];
+        if (blk.left === 0) return;
+        state.run = { block: bi, valid: blk.left === blk.total };
+        renderStatus(bi);
+    }
+
+    function endRun() {
+        if (!state.run) return;
+        const bi = state.run.block;
+        state.run = null;
+        renderStatus(bi);
     }
 
     function setHp(v) {
@@ -934,19 +1023,23 @@
 
             blk.left--;
             if (blk.left === 0) {
-                const blockEl = zone.closest('.exercise-block');
-                blockEl.classList.add('done');
-                const status = blockEl.querySelector('.section-status');
-                if (blk.wrong === 0) {
-                    blockEl.classList.add('perfect');
-                    status.textContent = `HOÀN HẢO +${SECTION_BONUS}`;
+                blk.el.classList.add('done');
+                const perfect = state.run && state.run.block === bi && state.run.valid;
+                state.run = null;
+                blk.el.classList.remove('running');
+                if (perfect) {
+                    blk.el.classList.add('perfect');
+                    blk.el.querySelector('.section-status').textContent = `PERFECT +${SECTION_BONUS}`;
                     setTimeout(() => {
                         addScore(SECTION_BONUS);
-                        popup(x, y - 30, `+${SECTION_BONUS} ĐOẠN HOÀN HẢO`, 'bonus');
+                        popup(x, y - 30, `PERFECT +${SECTION_BONUS}`, 'bonus');
+                        banner('PERFECT', `+${SECTION_BONUS} ĐIỂM · ĐIỀN HẾT KHÔNG DỪNG AUDIO`);
                     }, 250);
                 } else {
-                    status.textContent = `XONG · SAI ${blk.wrong} LẦN`;
+                    renderStatus(bi);
                 }
+            } else {
+                renderStatus(bi);
             }
         } else {
             blk.wrong++;
@@ -1016,11 +1109,11 @@
                 });
                 return `<div class="line"><span class="speaker">${line.s}:</span> ${text}</div>`;
             }).join('');
-            state.blocks.push({ left: count, wrong: 0 });
+            state.blocks.push({ total: count, left: count, wrong: 0, el: block });
 
             block.innerHTML = `
                 <div class="dialogue-header">
-                    <button class="play-btn" data-start="${part.start}" data-end="${part.end}">▶</button>
+                    <button class="play-btn" data-block="${bi}" data-start="${part.start}" data-end="${part.end}">▶</button>
                     <span class="section-title">Đoạn ${part.title}</span>
                     <span class="section-status">${count} CHỖ TRỐNG</span>
                 </div>
@@ -1030,21 +1123,33 @@
         });
 
         let stopAt = null;
+        let selfSeek = false;
         masterAudio.addEventListener('timeupdate', () => {
             if (stopAt !== null && masterAudio.currentTime >= stopAt) {
                 masterAudio.pause();
                 stopAt = null;
             }
         });
+        // Audio dừng (tự bấm dừng hoặc hết đoạn) / tự tua → mất lượt PERFECT
+        masterAudio.addEventListener('pause', () => endRun());
+        masterAudio.addEventListener('seeking', () => {
+            if (selfSeek) { selfSeek = false; return; }
+            endRun();
+        });
 
         document.querySelectorAll('.play-btn').forEach(btn => {
             btn.onclick = () => {
                 const start = parseFloat(btn.dataset.start);
                 const end = parseFloat(btn.dataset.end);
+                const bi = Number(btn.dataset.block);
                 const playSegment = () => {
+                    endRun();
                     stopAt = end;
+                    selfSeek = true;
+                    setTimeout(() => { selfSeek = false; }, 600);
                     masterAudio.currentTime = start;
                     masterAudio.play();
+                    startRun(bi);
                 };
                 if (masterAudio.readyState >= 1) playSegment();
                 else masterAudio.addEventListener('loadedmetadata', playSegment, { once: true });
